@@ -12,10 +12,12 @@ import paymentRouters from "./Routes/paymentRoutes.js"
 import dashboardRouter from "./Routes/dashboardRoutes.js";
 import aboutRoutes from "./Routes/aboutRoutes.js";
 
+const Client_URL = process.env.CLIENT_URL
+
 
 dotenv.config();
 const app = express();
-app.use(cors({ origin: "http://localhost:5173", credentials: true}))
+app.use(cors({ origin: `${Client_URL}`, credentials: true}))
 
 
 app.use(express.json())
