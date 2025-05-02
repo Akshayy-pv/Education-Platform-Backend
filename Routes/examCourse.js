@@ -1,7 +1,14 @@
 import express from "express"
-import { examCourseCreation } from "../Controller/examCourseCreationController";
+import { createCourseWithExams, getCourseById, getCourses } from "../Controller/examCourseCreationController.js";
 
 const examCourseRoutes = express.Router();
 
 
-examCourseRoutes.post("/creation", examCourseCreation)
+examCourseRoutes.post("/creation", createCourseWithExams)
+examCourseRoutes.get("/courses/:id", getCourseById);
+examCourseRoutes.get("/courses", getCourses);
+
+
+
+
+export default examCourseRoutes

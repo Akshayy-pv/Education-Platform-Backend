@@ -11,6 +11,7 @@ import adminRoutes from "./Routes/adminRoutes.js";
 import paymentRouters from "./Routes/paymentRoutes.js"
 import dashboardRouter from "./Routes/dashboardRoutes.js";
 import aboutRoutes from "./Routes/aboutRoutes.js";
+import examCourseRoutes from "./Routes/examCourse.js";
 
 const Client_URL = process.env.CLIENT_URL
 
@@ -26,6 +27,7 @@ app.use(bodyParser.json());
 
 app.use('/api/auth',authRoutes);
 app.use('/api/exam', examRoutes);
+app.use('/api/examCourse', examCourseRoutes);
 app.use('/api/course', courseRoutes)
 app.use('/api/payment', paymentRouters)
 app.use('/api/admin', adminRoutes)

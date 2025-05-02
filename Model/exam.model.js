@@ -21,6 +21,7 @@ const examSchema = new mongoose.Schema(
         title: { type: String, required: true },
         question: [qst],
         negativeMarking: { type: Number, default: 0 },
+        duration: { type: Number, required: true },
         score: [
             {
                 user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },

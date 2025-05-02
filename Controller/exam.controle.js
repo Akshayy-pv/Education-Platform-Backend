@@ -6,7 +6,7 @@ import { User } from "../Model/user.model.js";
 
 export const exam = async (req, res) => {
     try {
-        const { title, questions, negativeMarking } = req.body;
+        const { title, questions, negativeMarking, duration } = req.body;
 
         if (!Array.isArray(questions) || questions.length === 0) {
             return res.status(400).json({ success: false, message: "Questions must be an array" });
@@ -24,6 +24,7 @@ export const exam = async (req, res) => {
             title,
             question: formattedQuestions,
             negativeMarking,
+            duration
             // createdBy: req.user.id, 
         });
 
