@@ -6,7 +6,7 @@ const aboutRoutes = express.Router()
 
 
 
-aboutRoutes.post("/createAdvisor",upload.single("image"), createAdvisor)
+aboutRoutes.post("/createAdvisor", upload.single("image"), createAdvisor);
 aboutRoutes.get("/getAdvisor",getAdvisor)
         
 

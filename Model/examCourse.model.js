@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 const questionSchema = new mongoose.Schema({
     question: { type: String, required: true },
+    image:{ type: String},
     option: {
         type: [String],
         required: true,
