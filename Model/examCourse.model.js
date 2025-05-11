@@ -12,7 +12,7 @@ const questionSchema = new mongoose.Schema({
             message: "Each question must have exactly 4 options"
         }
     },
-    answer: { type: String, required: true },
+    answer: { type: String },
     marks: { type: Number, default: 1 }
 });
 
