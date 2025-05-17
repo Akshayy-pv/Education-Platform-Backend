@@ -14,21 +14,30 @@ const razorpay = new Razorpay({
 // Create a new Razorpay order
 export const createOrder = async (req, res) => {
     try {
-        const { amount, currency } = req.body;
+        let { amount, currency } = req.body;
+
+        if (!amount || isNaN(amount)) {
+            return res.status(400).json({ success: false, message: "Invalid or missing amount" });
+        }
+
+        amount = parseInt(amount);
 
         const options = {
-            amount: amount * 100, // Convert amount to paise
+            amount: amount * 100, // Razorpay uses paise
             currency: currency || "INR",
             receipt: `receipt_${Math.floor(Math.random() * 100000)}`,
         };
 
+        console.log("Creating Razorpay order with:", options);
+
         const order = await razorpay.orders.create(options);
         res.status(200).json({ success: true, order });
     } catch (error) {
-        console.error("Error creating Razorpay order:", error);
+        console.error("Error creating Razorpay order:", error?.response || error);
         res.status(500).json({ success: false, message: "Payment failed" });
     }
 };
+
 
 // Verify the payment signature from Razorpay
 export const verifyPayment = async (req, res) => {
