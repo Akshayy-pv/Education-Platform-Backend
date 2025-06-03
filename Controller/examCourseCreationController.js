@@ -107,3 +107,17 @@ export const updateCourseWithExams = async (req, res) => {
       res.status(500).json({ success: false, message: "Server error" });
     }
   };
+
+  export const examDelete = async (req, res) => {
+     try {
+        const course = await ExamCourse.findByIdAndDelete(req.params.id);
+        if (!course) {
+            return res.status(404).json({ message: 'Course not found' });
+        }
+        res.json({ message: 'Course deleted successfully' });
+    } catch (error) {
+        console.error('Delete course error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+
+  }

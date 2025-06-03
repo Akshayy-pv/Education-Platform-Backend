@@ -1,5 +1,5 @@
 import express from "express"
-import { createCourseWithExams, getCourseById, getCourses, updateCourseWithExams } from "../Controller/examCourseCreationController.js";
+import { createCourseWithExams, examDelete, getCourseById, getCourses, updateCourseWithExams } from "../Controller/examCourseCreationController.js";
 import parser from "../meddileWare/multerUpload.js";
 import multer from "multer";
 import pdfParse from 'pdf-parse/lib/pdf-parse.js';
@@ -40,6 +40,7 @@ examCourseRoutes.post('/upload-image', parser.single('image'), (req, res) => {
 examCourseRoutes.get("/courses/:id", getCourseById);
 examCourseRoutes.get("/courses", getCourses);
 examCourseRoutes.put("/courses/:id", updateCourseWithExams  );
+examCourseRoutes.delete('/courses/:id', examDelete)
 
 
 examCourseRoutes.post("/generate-from-pdf", upload.single("pdf"), async (req, res) => {
