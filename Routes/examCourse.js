@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fetch from "node-fetch";
 import { GoogleAuth } from "google-auth-library";
+import { marks } from "../Controller/exam.controle.js";
 
 // ESM workaround to get __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -41,6 +42,7 @@ examCourseRoutes.get("/courses/:id", getCourseById);
 examCourseRoutes.get("/courses", getCourses);
 examCourseRoutes.put("/courses/:id", updateCourseWithExams  );
 examCourseRoutes.delete('/courses/:id', examDelete)
+examCourseRoutes.post('/marks/:examId', marks);
 
 
 examCourseRoutes.post("/generate-from-pdf", upload.single("pdf"), async (req, res) => {

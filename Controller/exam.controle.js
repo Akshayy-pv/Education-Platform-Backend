@@ -49,55 +49,59 @@ export const examAll = async (req, res) => {
 
 
 export const marks = async (req, res) => {
-    try {
-        const { examId } = req.params;
-        const { answers, userId } = req.body;
+  try {
+    const { examId } = req.params;
+    const { answers, userId } = req.body;
 
-        console.log("User Id", userId)
-        console.log(answers)
-
-
-        if (!answers || !Array.isArray(answers)) {
-            return res.status(400).json({ success: false, message: "Invalid answers format" });
-        }
-
-        const exam = await Exam.findById(req.params.examId);
-        if (!exam) return res.status(404).json({ success: false, message: "Exam not found" });
-
-        let totalScore = 0;
-        const correctAnswers = exam.question.map((q, index) => {
-            const correctAnswer = q.answer.trim().toLowerCase();
-            const submittedAnswer = answers[index]?.trim().toLowerCase() || ""; 
-
-            if (correctAnswer === submittedAnswer) {
-                console.log(submittedAnswer)
-                totalScore += q.marks;
-                console.log("correct Answer",totalScore)
-
-            } else if (submittedAnswer !== "") {
-                totalScore -= exam.negativeMarking;
-                console.log("wrong Answer",totalScore)
-            }
-
-            return { question: q.question, correctAnswer, submittedAnswer ,totalScore };
-        });
-
-        exam.score.push({ user: req.user.id, score: totalScore });
-        await exam.save();
-        
-        const examResult = new ExamResult({ user: userId, exam: examId, score: totalScore });
-        await examResult.save();
-
-        console.log(examResult);
-
-        
-        console.log("total score",totalScore)
-        return res.status(200).json({ success: true, totalMarks: totalScore, correctAnswers });
-        
-    } catch (error) {
-        console.error("Error submitting exam:", error);
-        return res.status(500).json({ success: false, message: "Internal server error" });
+    if (!answers || !Array.isArray(answers)) {
+      return res.status(400).json({ success: false, message: "Invalid answers format" });
     }
+
+    const exam = await Exam.findById(examId);
+    if (!exam) {
+      return res.status(404).json({ success: false, message: "Exam not found" });
+    }
+
+    let totalScore = 0;
+    const correctAnswers = exam.question.map((q, index) => {
+      const correctAnswer = q.answer.trim().toLowerCase();
+      const submittedAnswer = answers[index]?.trim().toLowerCase() || "";
+
+      if (submittedAnswer === correctAnswer) {
+        totalScore += q.marks;
+      } else if (submittedAnswer !== "") {
+        totalScore -= exam.negativeMarking;
+      }
+
+      return {
+        question: q.question,
+        correctAnswer: q.answer,
+        submittedAnswer: answers[index] || "Not Answered",
+        isCorrect: submittedAnswer === correctAnswer
+      };
+    });
+
+    // Allow score to go negative
+    const result = {
+      user: userId,
+      exam: examId,
+      score: totalScore
+    };
+
+    await new ExamResult(result).save();
+    exam.score.push({ user: userId, score: totalScore });
+    await exam.save();
+
+    return res.status(200).json({
+      success: true,
+      totalMarks: totalScore,
+      correctAnswers
+    });
+
+  } catch (error) {
+    console.error("Error submitting exam:", error);
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
 };
 
 
