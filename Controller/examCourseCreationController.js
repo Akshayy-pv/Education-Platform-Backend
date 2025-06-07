@@ -121,3 +121,53 @@ export const updateCourseWithExams = async (req, res) => {
     }
 
   }
+
+  export const marks = async (req, res) => {
+  try {
+    const { examId } = req.params;
+    const { answers, userId } = req.body;
+
+    if (!answers || !Array.isArray(answers)) {
+      return res.status(400).json({ success: false, message: "Invalid answers format" });
+    }
+
+    // Step 1: Find the course containing the exam
+    const course = await ExamCourse.findOne({ "exams._id": examId });
+    if (!course) {
+      return res.status(404).json({ success: false, message: "Exam not found in any course" });
+    }
+
+    // Step 2: Find the specific exam inside the course
+    const exam = course.exams.id(examId);
+
+    let totalScore = 0;
+    const correctAnswers = exam.questions.map((q, index) => {
+      const correctAnswer = q.answer.trim().toLowerCase();
+      const submittedAnswer = answers[index]?.trim().toLowerCase() || "";
+
+      if (submittedAnswer === correctAnswer) {
+        totalScore += q.marks;
+      } else if (submittedAnswer !== "") {
+        totalScore -= exam.negativeMarking;
+      }
+
+      return {
+        question: q.question,
+        correctAnswer: q.answer,
+        submittedAnswer: answers[index] || "Not Answered",
+        isCorrect: submittedAnswer === correctAnswer
+      };
+    });
+
+    // Save result — for now you can just return the response (implement saving later if needed)
+    return res.status(200).json({
+      success: true,
+      totalMarks: totalScore,
+      correctAnswers
+    });
+
+  } catch (error) {
+    console.error("Error submitting exam:", error);
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};

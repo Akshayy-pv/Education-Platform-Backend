@@ -1,5 +1,5 @@
 import express from "express"
-import { createCourseWithExams, examDelete, getCourseById, getCourses, updateCourseWithExams } from "../Controller/examCourseCreationController.js";
+import { createCourseWithExams, examDelete, getCourseById, getCourses, marks, updateCourseWithExams } from "../Controller/examCourseCreationController.js";
 import parser from "../meddileWare/multerUpload.js";
 import multer from "multer";
 import pdfParse from 'pdf-parse/lib/pdf-parse.js';
@@ -10,7 +10,8 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fetch from "node-fetch";
 import { GoogleAuth } from "google-auth-library";
-import { marks } from "../Controller/exam.controle.js";
+
+
 
 // ESM workaround to get __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -23,6 +24,7 @@ const pdfPath = path.join(__dirname, "uploads", "your-actual-file.pdf");
 
 
 
+examCourseRoutes.post('/marks/:examId',marks );
 
 examCourseRoutes.post("/creation",createCourseWithExams);
 
@@ -37,12 +39,11 @@ examCourseRoutes.post('/upload-image', parser.single('image'), (req, res) => {
     }
 });
 
-
 examCourseRoutes.get("/courses/:id", getCourseById);
 examCourseRoutes.get("/courses", getCourses);
 examCourseRoutes.put("/courses/:id", updateCourseWithExams  );
 examCourseRoutes.delete('/courses/:id', examDelete)
-examCourseRoutes.post('/marks/:examId', marks);
+
 
 
 examCourseRoutes.post("/generate-from-pdf", upload.single("pdf"), async (req, res) => {
