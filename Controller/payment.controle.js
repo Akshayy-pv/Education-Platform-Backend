@@ -71,3 +71,51 @@ export const verifyPayment = async (req, res) => {
         res.status(500).json({ success: false, message: "Error verifying payment", error: error.message });
     }
 };
+
+
+
+export const checkPaymentStatus = async (req, res) => {
+    const { orderId } = req.params;
+
+    try {
+        const payments = await razorpay.orders.fetchPayments(orderId);
+
+        if (payments.items.length > 0) {
+            const payment = payments.items[0];
+
+            if (payment.status === "captured") {
+                return res.status(200).json({
+                    success: true,
+                    status: "paid",
+                    razorpay_payment_id: payment.id,
+                    razorpay_order_id: payment.order_id,
+                });
+            }
+        }
+
+        return res.status(200).json({ success: true, status: "pending" });
+    } catch (err) {
+        console.error("Error checking payment status:", err);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+};
+
+
+export const enrollCourseManually = async (req, res) => {
+    const { userId, courseId, orderId } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ success: false, message: "User not found" });
+
+        if (!user.enrolledCourses.includes(courseId)) {
+            user.enrolledCourses.push(courseId);
+            await user.save();
+        }
+
+        return res.status(200).json({ success: true, message: "User enrolled after QR payment" });
+    } catch (err) {
+        console.error("Error enrolling user:", err);
+        return res.status(500).json({ success: false, message: "Enrollment failed" });
+    }
+};
