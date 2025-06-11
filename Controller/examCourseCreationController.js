@@ -148,7 +148,7 @@ export const updateCourseWithExams = async (req, res) => {
       if (submittedAnswer === correctAnswer) {
         totalScore += q.marks;
       } else if (submittedAnswer !== "") {
-        totalScore -= exam.negativeMarking;
+        totalScore -= q.negativeMarking || exam.negativeMarking || 0;
       }
 
       return {
