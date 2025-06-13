@@ -75,3 +75,26 @@ export const logout = (req, res) => {
         res.status(500).json({ success: false, message: "Error in logout" });
     }
 };
+
+
+
+export const profile = async (req, res) => {
+    const { userId, enrolledCourses } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(400).json({ message: "User not exist" });
+        }
+
+        // Update only the provided field
+        if (enrolledCourses) user.enrolledCourses = enrolledCourses;
+
+        await user.save();
+
+        res.status(200).json({ success: true, message: "User updated successfully", user });
+    } catch (err) {
+        res.status(500).json({ success: false, message: `Update failed: ${err.message}` });
+    }
+};
