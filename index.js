@@ -1,3 +1,7 @@
+import dns from "node:dns/promises"
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
+
+
 import express from "express"
 import { connectDB } from "./connectDB/db.js";
 import dotenv from "dotenv"
@@ -15,7 +19,6 @@ import examCourseRoutes from "./Routes/examCourse.js";
 
 const Client_URL = process.env.CLIENT_URL
 
-console.log("hello");
 
 
 dotenv.config();
