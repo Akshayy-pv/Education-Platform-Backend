@@ -15,6 +15,8 @@ import examCourseRoutes from "./Routes/examCourse.js";
 
 const Client_URL = process.env.CLIENT_URL
 
+console.log("hello");
+
 
 dotenv.config();
 const app = express();
