@@ -5,13 +5,11 @@ import { User } from "../Model/user.model.js";
 
 dotenv.config();
 
-// Initialize Razorpay instance
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// Create a new Razorpay order
 export const createOrder = async (req, res) => {
     try {
         let { amount, currency } = req.body;
@@ -23,7 +21,7 @@ export const createOrder = async (req, res) => {
         amount = parseInt(amount);
 
         const options = {
-            amount: amount * 100, // Razorpay uses paise
+            amount: amount * 100, 
             currency: currency || "INR",
             receipt: `receipt_${Math.floor(Math.random() * 100000)}`,
         };
@@ -39,7 +37,6 @@ export const createOrder = async (req, res) => {
 };
 
 
-// Verify the payment signature from Razorpay
 export const verifyPayment = async (req, res) => {
     try {
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature, userId, courseId } = req.body;
@@ -56,7 +53,6 @@ export const verifyPayment = async (req, res) => {
             return res.status(400).json({ success: false, message: "Payment verification failed" });
         }
 
-        // Update user's enrolled courses
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ success: false, message: "User not found" });
 

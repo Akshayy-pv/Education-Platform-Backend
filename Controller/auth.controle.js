@@ -24,7 +24,7 @@ export const register = async (req,res) => {
             name,
             email,
             password: hashpassword,
-            isAdmin// Only true if explicitly passed
+            isAdmin
         });
 
         await newUser.save();
@@ -88,7 +88,6 @@ export const profile = async (req, res) => {
             return res.status(400).json({ message: "User not exist" });
         }
 
-        // Update only the provided field
         if (enrolledCourses) user.enrolledCourses = enrolledCourses;
 
         await user.save();

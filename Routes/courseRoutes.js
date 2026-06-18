@@ -24,7 +24,6 @@ courseRoutes.post("/create",(req, res) => {
             });
         }
 
-        // ✅ Call createCourse after successful file upload
         createCourse(req, res);
     });
 })

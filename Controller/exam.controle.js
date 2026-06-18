@@ -25,7 +25,7 @@ export const exam = async (req, res) => {
             question: formattedQuestions,
             negativeMarking,
             duration
-            // createdBy: req.user.id, 
+           
         });
 
         await newExam.save();
@@ -81,7 +81,6 @@ export const marks = async (req, res) => {
       };
     });
 
-    // Allow score to go negative
     const result = {
       user: userId,
       exam: examId,
@@ -108,7 +107,7 @@ export const marks = async (req, res) => {
 
 export const getSingleExam = async (req, res) => {
     try {
-        const exam = await Exam.findById(req.params.examId).populate("question");  // Ensure questions are populated
+        const exam = await Exam.findById(req.params.examId).populate("question"); 
         if (!exam) return res.status(404).json({ success: false, message: "Exam not found" });
 
         res.status(200).json({ success: true, exam });

@@ -13,7 +13,6 @@ import { GoogleAuth } from "google-auth-library";
 
 
 
-// ESM workaround to get __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -31,7 +30,7 @@ examCourseRoutes.post("/creation",createCourseWithExams);
 examCourseRoutes.post('/upload-image', parser.single('image'), (req, res) => {
     try {
         const imageUrl = req.file.path;
-        const fullImageUrl = req.file.path.replace(/\\/g, '/');  // Ensure correct URL format
+        const fullImageUrl = req.file.path.replace(/\\/g, '/'); 
         res.json({ imageUrl: fullImageUrl });
     } catch (err) {
         console.error("Image upload error:", err);
@@ -49,7 +48,7 @@ examCourseRoutes.delete('/courses/:id', examDelete)
 examCourseRoutes.post("/generate-from-pdf", upload.single("pdf"), async (req, res) => {
   try {
     const pdfBuffer = req.file.buffer;
-    const data = await pdfParse(pdfBuffer); // ✅ this is good
+    const data = await pdfParse(pdfBuffer);
     const rawText = data.text;
 
     const courseData = await getGeminiGeneratedCourse(rawText);

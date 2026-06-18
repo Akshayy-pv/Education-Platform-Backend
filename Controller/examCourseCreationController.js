@@ -32,7 +32,7 @@ export const createCourseWithExams = async (req, res) => {
             price,
             prerequisites,
             exams: formattedExams,
-            createdBy: req.userId // from auth middleware
+            createdBy: req.userId 
         });
 
         await course.save();
@@ -131,13 +131,11 @@ export const updateCourseWithExams = async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid answers format" });
     }
 
-    // Step 1: Find the course containing the exam
     const course = await ExamCourse.findOne({ "exams._id": examId });
     if (!course) {
       return res.status(404).json({ success: false, message: "Exam not found in any course" });
     }
 
-    // Step 2: Find the specific exam inside the course
     const exam = course.exams.id(examId);
 
     let totalScore = 0;
@@ -159,7 +157,6 @@ export const updateCourseWithExams = async (req, res) => {
       };
     });
 
-    // Save result — for now you can just return the response (implement saving later if needed)
     return res.status(200).json({
       success: true,
       totalMarks: totalScore,

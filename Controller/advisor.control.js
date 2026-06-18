@@ -4,7 +4,6 @@ export const createAdvisor = async (req, res) => {
   try {
       const { name, role, description } = req.body;
       
-      // Store the full Cloudinary URL
       const imageUrl = req.file ? req.file.path : "";
       
       const newAdvisor = new About({ name, role, description, imageUrl });

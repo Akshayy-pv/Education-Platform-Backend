@@ -7,13 +7,13 @@ const qst = new mongoose.Schema({
         required: true, 
         validate: {
             validator: function(v) {
-                return v.length === 4; // Ensure exactly 4 options are provided
+                return v.length === 4; 
             },
             message: 'Each question must have exactly 4 options'
         }
     },
     answer: { type: String, required: true },
-    marks: { type: Number, default: 1 } // Default mark per question is 1
+    marks: { type: Number, default: 1 } 
 });
 
 const examSchema = new mongoose.Schema(

@@ -5,7 +5,7 @@ import cloudinary from '../utils/cloudinary.js';
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: 'advisors',  // Use a specific folder for advisor images
+    folder: 'advisors',  
     allowed_formats: ['jpg', 'png', 'jpeg'],
   },
 });
