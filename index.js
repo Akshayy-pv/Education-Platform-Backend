@@ -26,8 +26,8 @@ const app = express();
 app.use(cors({ origin: `${Client_URL}`, credentials: true}))
 
 
-// app.use(express.json({ limit: '10mb' }));
-// app.use(bodyParser.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(bodyParser.json());
 
 
 app.use('/api/auth',authRoutes);
